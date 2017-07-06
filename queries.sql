@@ -3,17 +3,17 @@ go
 
 -- ############### CONSTRAINT
 -- 1. sprawdza czy email jest poprawny
-ALTER TABLE Pracownik
-ADDCONSTRAINT ch_sprawdz_email CHECK (Email like '%[@]%')
+ALTER TABLE Pracownik 
+ADD CONSTRAINT ch_sprawdz_email CHECK (Email like '%[@]%')
 
 -- 2. sprawdza czy jest do ZgloszeniaAwarii jest przydzielone jedno ZamowienieLicencji lub jedno ZamowienieSprzetu
-ALTER TABLE ZgloszenieAwarii
-ADDCONSTRAINT ch_czy_przypisano_produkt CHECK ((ZamowienieSprzetuID is NULL and ZamowienieLicencjiID is not NULL)
+ALTER TABLE ZgloszenieAwarii 
+ADD CONSTRAINT ch_czy_przypisano_produkt CHECK ((ZamowienieSprzetuID is NULL and ZamowienieLicencjiID is not NULL)
 											or (ZamowienieSprzetuID is not NULL and ZamowienieLicencjiID is NULL))
 
 -- 3. sprawdz czy data nowego statusu danego zgloszenia jest pozniejsza niz ostatnia dostepna juz w bazie
 ALTER TABLE HistoriaZgloszenia with nocheck
-ADDCONSTRAINT ch_daty_rosnaco CHECK (Data >= dbo.fn_maxDataHistZgl(ZgloszenieAwariiID))
+ADD CONSTRAINT ch_daty_rosnaco CHECK (Data >= dbo.fn_maxDataHistZgl(ZgloszenieAwariiID))
 GO
 -- funkcja zwracajaca maksymalna date z historii dla danego zgloszenia
 -- (poniewaz nie mozna umieszczac subquery bezposrednio w CHECK CONSTRAINT)
